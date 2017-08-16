@@ -43,14 +43,14 @@ function fetchApi(endpoint) {
   })
 }
 
-function fetchData(WrappedComponent) {
+function fetchData(WrappedComponent, endpoint) {
   class Enhance extends Component {
     state = {
       fetchData: {}
     };
 
     componentDidMount() {
-      fetchApi(WrappedComponent.API_ENDPOINT)
+      fetchApi(endpoint)
         .then(fetchData => this.setState({fetchData}))
         .catch(error => console.log(error.message))
     };
@@ -80,7 +80,9 @@ class ProtectedComponent extends Component {
   }
 }
 
-const EnhancedComponent = fetchData(logProps(forAuth(ProtectedComponent)));
+const EnhancedComponent = fetchData(
+  logProps(forAuth(ProtectedComponent)), '/articles'
+);
 
 class App extends Component {
   state = {
