@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
+import hoistNonReactStatic from 'hoist-non-react-statics'
 
 function forAuth(WrappedComponent) {
-  return class extends Component {
+   class Enhance extends Component {
     render() {
       const props = this.props;
       const {isLogin, credential, ...rest} = props;
@@ -10,6 +11,7 @@ function forAuth(WrappedComponent) {
       return props.isLogin ? <WrappedComponent {...rest} auth={auth}/> : null;
     }
   }
+  return hoistNonReactStatic(Enhance, WrappedComponent);
 }
 
 function logProps(WrappedComponent) {
@@ -45,7 +47,7 @@ function fetchApi(endpoint) {
 }
 
 function fetchData(WrappedComponent) {
-  return class extends Component {
+  class Enhance extends Component {
     state = {
       fetchData: {}
     };
@@ -60,6 +62,7 @@ function fetchData(WrappedComponent) {
       return <WrappedComponent {...this.props}{...this.state}/>
     }
   }
+  return hoistNonReactStatic(Enhance, WrappedComponent);
 }
 
 class ProtectedComponent extends Component {
