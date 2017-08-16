@@ -15,7 +15,7 @@ function forAuth(WrappedComponent) {
 }
 
 function logProps(WrappedComponent) {
-  return class extends Component {
+  class Enhance extends Component {
     componentWillReceiveProps(nextProps) {
       console.log('Prev Props', this.props);
       console.log('Next Props', nextProps);
@@ -24,12 +24,9 @@ function logProps(WrappedComponent) {
     render() {
       return <WrappedComponent {...this.props}/>
     }
-  };
+  }
+  return hoistNonReactStatic(Enhance, WrappedComponent);
 }
-
-/*const ProtectedComponent = ({auth}) => (
-  <h2>Protected Content: {auth.isLogin.toString()}</h2>
-);*/
 
 function fetchApi(endpoint) {
   return new Promise((resolve, reject) => {
@@ -83,7 +80,7 @@ class ProtectedComponent extends Component {
   }
 }
 
-const EnhancedComponent = logProps(forAuth(fetchData(ProtectedComponent)));
+const EnhancedComponent = fetchData(logProps(forAuth(ProtectedComponent)));
 
 class App extends Component {
   state = {
