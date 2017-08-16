@@ -77,7 +77,6 @@ function fetchData(WrappedComponent, endpoint) {
 }
 
 class ProtectedComponent extends Component {
-  static API_ENDPOINT = '/articles';
 
   render() {
     const {fetchData: {articles}} = this.props;
