@@ -1,8 +1,14 @@
 import React, {Component} from 'react';
-import hoistNonReactStatic from 'hoist-non-react-statics'
+import hoistNonReactStatic from 'hoist-non-react-statics';
+
+function getDisplayName(WrappedComponent) {
+  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+}
 
 function forAuth(WrappedComponent) {
-   class Enhance extends Component {
+  class Enhance extends Component {
+    static displayName = `ForAuth(${getDisplayName(WrappedComponent)})`;
+
     render() {
       const props = this.props;
       const {isLogin, credential, ...rest} = props;
@@ -11,11 +17,14 @@ function forAuth(WrappedComponent) {
       return props.isLogin ? <WrappedComponent {...rest} auth={auth}/> : null;
     }
   }
+
   return hoistNonReactStatic(Enhance, WrappedComponent);
 }
 
 function logProps(WrappedComponent) {
   class Enhance extends Component {
+    static displayName = `LogProps(${getDisplayName(WrappedComponent)})`;
+
     componentWillReceiveProps(nextProps) {
       console.log('Prev Props', this.props);
       console.log('Next Props', nextProps);
@@ -25,6 +34,7 @@ function logProps(WrappedComponent) {
       return <WrappedComponent {...this.props}/>
     }
   }
+
   return hoistNonReactStatic(Enhance, WrappedComponent);
 }
 
@@ -45,6 +55,9 @@ function fetchApi(endpoint) {
 
 function fetchData(WrappedComponent, endpoint) {
   class Enhance extends Component {
+
+    static displayName = `FetchData(${getDisplayName(WrappedComponent)})`;
+
     state = {
       fetchData: {}
     };
@@ -59,6 +72,7 @@ function fetchData(WrappedComponent, endpoint) {
       return <WrappedComponent {...this.props}{...this.state}/>
     }
   }
+
   return hoistNonReactStatic(Enhance, WrappedComponent);
 }
 
